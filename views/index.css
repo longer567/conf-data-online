@@ -1,0 +1,27 @@
+.header{
+    height: 60px;
+    background: #555555;
+    color: #FFFFFF;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-left{
+    font-size: 24px;
+    margin-left: 100px;
+}
+.header-right{
+    font-size: 24px;
+    margin-right: 100px;
+}
+.content{
+    width: 1000px;
+    margin: 20px auto;
+}
+.item{
+    height: 40px;
+    line-height: 40px;
+    border-top: 1px solid #999999;
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,5 +1,17 @@
 html
   head
-    title= title
+    title 数据配置平台
+    style
+      include common.css
+    style
+      include index.css
   body
-    h1= message
+    div.header
+      div.header-left 内容配置平台
+      div.header-right 创建   
+    div.content
+      - for(var i=0; i<20; i++)
+        div.item 
+          div.item-name 项目名称#{i+1}
+          div.item-edit 编辑
+          div.item-delete 删除
