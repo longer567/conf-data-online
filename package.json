@@ -1,0 +1,24 @@
+{
+  "name": "conf-data-online",
+  "version": "1.0.0",
+  "description": "An configuration for data in online",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./server/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/longer567/conf-data-online.git"
+  },
+  "author": "longer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/longer567/conf-data-online/issues"
+  },
+  "homepage": "https://github.com/longer567/conf-data-online#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pug": "^2.0.4"
+  }
+}
