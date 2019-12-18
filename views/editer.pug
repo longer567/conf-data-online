@@ -6,4 +6,21 @@ html
     style
       include editer.css
   body
-    
+    div.header
+      div.header-left 内容配置平台
+      div.header-right 创建 
+    div.all
+      div.editer-input
+        - for( var i=0; i<10; i++ )
+          div.item
+            div.input-title #{i+1}
+            input.input-content(type="text")
+      div.editer-data 
+      pre.editer-result 
+        | a: {
+        |   b: "bbb",
+        |   c: {
+        |     d: "ddd"
+        |   }
+        | }
+      
