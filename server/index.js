@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const { indexPage, editerPage } = require('./router/routerPage')
 
+app.use(express.static('public'))
 app.set('view engine', 'pug')
 app.get('/', indexPage)
 app.get('/editer', editerPage)

@@ -1,0 +1,3 @@
+dataBase:
+  url: mongodb://localhost:27018
+  dbName: confDataOnline

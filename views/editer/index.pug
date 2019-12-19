@@ -1,0 +1,62 @@
+html
+  head
+    title 数据配置平台
+    style
+      include ../common/common.css
+    style
+      include editer.css
+    script(src="http://www.zeptojs.cn/zepto.min.js")
+    script
+      include editer.js
+  body
+    div.header
+      div.header-left 内容配置平台
+      div.header-right 创建 
+    div.all
+      div.editer-input
+        div.item
+          div.input-title hhh
+          input.input-content(type="text")
+        - for( var i=0; i<10; i++ )
+          div.item
+            div.input-title #{i+1}
+            input.input-content(type="text")
+        div.json(index='0'
+          cj='0'
+          show='false'
+        ) xxx 
+          div.json-before
+          div.json-content
+            - for( var i=0; i<4; i++ )
+              div.item
+                div.input-title json#{i+1}
+                input.input-content(type="text")
+            div.json(index='0'
+              cj='0'
+              show='false'
+            ) xxx 
+              div.json-before
+              div.json-content
+                - for( var i=0; i<4; i++ )
+                  div.item
+                    div.input-title json#{i+1}
+                    input.input-content(type="text")
+        div.json(index='1'
+          cj='0'
+          show='false'
+        ) xxx 
+          div.json-before
+          div.json-content
+            - for( var i=0; i<4; i++ )
+              div.item
+                div.input-title json#{i+1}
+                input.input-content(type="text")
+      textarea.editer-data
+      pre.editer-result 
+        | a: {
+        |   b: "bbb",
+        |   c: {
+        |     d: "ddd"
+        |   }
+        | }
+      

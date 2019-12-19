@@ -6,3 +6,6 @@ body{
     color: #222;
     background: #f5f6f7;
 }
+div{
+    box-sizing: border-box;
+}

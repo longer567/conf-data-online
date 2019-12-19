@@ -6,6 +6,6 @@ module.exports = {
         res.render(viewsPath('index'), {title: 'Hey', message: 'Hello there!'})
     },
     editerPage(req, res){
-        res.render(viewsPath('editer.pug'))
+        res.render(viewsPath('editer'))
     }
 }

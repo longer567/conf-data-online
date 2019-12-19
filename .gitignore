@@ -21,6 +21,7 @@ yarn.lock
 
 #sensitive infomation
 private.json
+tmp
 
 
 
