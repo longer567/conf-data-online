@@ -13,3 +13,9 @@ $(document).on('click', '.json-before', function (e) {
     }
 })
 
+// request(api.addItem, {
+//     itemName: 'test1',
+//     itemContent: {
+        
+//     }
+// }).then(res=> console.log(res))

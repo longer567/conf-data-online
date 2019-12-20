@@ -2,7 +2,7 @@
 /**
  * 
  * @param {*} collection 
- * @param {Array} objectArray An array constituted of multiple objects
+ * @param {Object} objectArray An array constituted of multiple objects
  * @param {(res) => {}} callback Do something by res
  */
 const insertManyDocuments = (collection, objectArray, callback) => {
