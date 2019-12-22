@@ -13,9 +13,14 @@ $(document).on('click', '.json-before', function (e) {
     }
 })
 
+// 创建点击
+$(document).on('click', '.addItem', function (e) {
+    console.log($('.editer-data').val())
+})
+
 // request(api.addItem, {
 //     itemName: 'test1',
 //     itemContent: {
-        
+
 //     }
 // }).then(res=> console.log(res))

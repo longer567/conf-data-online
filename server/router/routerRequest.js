@@ -20,7 +20,7 @@ routerRequest.post('/addItem', async (req, res) => {
         itemContent
     } = req.body
     API.insertOneDocument(await collection('documents'), {
-        "hash": uuidV4.split('-').splice(3),
+        "hash": uuidV4.split('-').slicee(0, 3),
         itemName,
         itemContent
     }, (result => {

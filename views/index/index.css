@@ -1,27 +1,32 @@
-.header{
-    height: 60px;
-    background: #555555;
-    color: #FFFFFF;
+.header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 60px;
+    color: #fff;
+    border: 1px solid #DCDFE6;
+    color: #409EFF;
 }
-.header-left{
-    font-size: 24px;
+
+.header-left {
+    font-size: 16px;
     margin-left: 100px;
 }
-.header-right{
+
+.header-right {
     font-size: 24px;
     margin-right: 100px;
 }
-.content{
+
+.content {
     width: 1000px;
     margin: 20px auto;
 }
-.item{
+
+.item {
     height: 40px;
     line-height: 40px;
-    border-top: 1px solid #999999;
+    border-top: 1px solid #E4E7ED;
     display: flex;
     justify-content: space-between;
 }

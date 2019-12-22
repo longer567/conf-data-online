@@ -17,6 +17,6 @@ html
     div.content
       - for(var i=0; i<20; i++)
         div.item 
-          div.item-name 项目名称#{i+1}
-          div.item-edit 编辑
-          div.item-delete 删除
+          div(class = "item-name text") 项目名称#{i+1}
+          div(class = "item-edit text") 编辑
+          div(class = "item-delete text") 删除

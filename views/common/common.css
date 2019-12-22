@@ -1,11 +1,50 @@
-*{
+* {
     margin: 0;
     padding: 0;
 }
-body{
-    color: #222;
-    background: #f5f6f7;
+
+body {
+    font-family: "Helvetica Neue",
+        Helvetica,
+        "PingFang SC",
+        "Hiragino Sans GB",
+        "Microsoft YaHei",
+        "微软雅黑",
+        Arial,
+        sans-serif;
+    font-size: 14px;
+    color: #606266;
 }
-div{
+
+div {
     box-sizing: border-box;
+}
+
+.button {
+    display: inline-block;
+    padding: 12px 20px;
+    border: 1px solid #dcdfe6;
+    border-radius: 2px;
+    color: #606266;
+    font-weight: 500;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: all .3s ease;
+}
+
+.button:hover {
+    color: #409eff;
+    border-color: #c6e2ff;
+    background-color: #ecf5ff;
+}
+
+.text {
+    color: #606266;
+    transition: all .3s ease;
+    cursor: pointer;
+}
+
+.text:hover {
+    color: #409eff;
 }

@@ -4,19 +4,24 @@
   align-items: center;
   height: 60px;
   color: #fff;
-  background: #555;
+  border: 1px solid #DCDFE6;
+  color: #409EFF;
 }
+
 .header-left {
   margin-left: 100px;
-  font-size: 24px;
+  font-size: 16px;
 }
+
 .header-right {
   margin-right: 100px;
   font-size: 24px;
 }
+
 .all {
   display: flex;
 }
+
 .editer-input,
 .editer-data,
 .editer-result {
@@ -24,9 +29,10 @@
   width: 400px;
   padding: 10px;
   margin: 20px;
-  border: 1px solid #666;
-  border-radius: 10px;
+  border: 1px solid #E4E7ED;
+  border-radius: 4px;
 }
+
 .item {
   display: flex;
   justify-content: space-around;
@@ -34,6 +40,7 @@
   margin-top: 15px;
   margin-bottom: 15px;
 }
+
 .input-content {
   width: 300px;
   height: 35px;
@@ -41,56 +48,83 @@
   font-size: 16px;
   font-weight: 400;
   text-indent: .5rem;
-  border: 1px solid #777;
-  border-radius: 5px;
+  border: 1px solid #DCDFE6;
+  border-radius: 4px;
   transition: all .3s ease;
 }
+
 input:focus {
-  box-shadow: 0 3px 3px 2px #777;
+  box-shadow: 0 3px 5px 1px #EBEEF5;
   outline: none;
   transform: translateY(-3px);
 }
+
 .json {
   position: relative;
   padding: 0 10px 0 15px;
   text-indent: 1rem;
   cursor: pointer;
+  margin: 10px auto;
 }
+
 .json-before {
   content: "";
   position: absolute;
-  top: 3px;
+  top: 2px;
   left: 10px;
   z-index: 1;
   box-sizing: border-box;
-  width: 20px;
-  height: 20px;
-  border-top: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  border-left: 10px solid #666;
+  width: 15px;
+  height: 15px;
+  border-top: 7.5px solid transparent;
+  border-right: 7.5px solid transparent;
+  border-bottom: 7.5px solid transparent;
+  border-left: 7.5px solid #909399;
   transform-origin: 5px 10px;
   transition: all .3s ease;
 }
+
+.json-before:hover,
+.json-before:focus {
+  border-left: 7.5px solid #606266;
+}
+
 .json-content {
   overflow: hidden;
   height: 0;
 }
+
 .editer-data {
   width: 355px;
   min-height: 100px;
   padding: 10px;
-  background-color: rgba(241,241,241,.98);
-  border: 1px solid black;
-  border-radius: 5px;
+  background-color: #F2F6FC;
+  border: 1px solid #DCDFE6;
+  border-radius: 4px;
   resize: none;
   color: #444;
   font-size: 16px;
   transition: all .3s ease;
 }
-textarea:focus {
-    box-shadow: 0 3px 3px 2px #777;
-    outline: none;
-    transform: translateY(-3px);
-  }
 
+textarea:focus {
+  box-shadow: 0 3px 6px 2px #EBEEF5;
+  outline: none;
+  transform: translateY(-3px);
+}
+
+.editer-result {
+  background: #F2F6FC;
+}
+
+.item-title {
+  display: flex;
+  text-align: center;
+  margin: 20px;
+}
+
+.name {
+  height: 36px;
+  line-height: 36px;
+  margin-right: 20px;
+}

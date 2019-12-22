@@ -14,11 +14,15 @@ html
     div.header
       div.header-left 内容配置平台
       div.header-right 创建 
+    div.button button
+    div.item-title
+      div.name 项目名称
+      input(class = "title input-content")
+    div.item-title
+      div.name 持有者
+      input(class = "title input-content")
     div.all
       div.editer-input
-        div.item
-          div.input-title hhh
-          input.input-content(type="text")
         - for( var i=0; i<10; i++ )
           div.item
             div.input-title #{i+1}
