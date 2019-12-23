@@ -15,7 +15,7 @@
 
 .header-right {
   margin-right: 16px;
-  font-size: 24px;
+  font-size: 16px;
 }
 
 .all {
@@ -25,8 +25,8 @@
 .editer-input,
 .editer-data,
 .editer-result {
+  width: 33.3%;
   box-sizing: border-box;
-  width: 400px;
   padding: 10px;
   margin: 20px;
   border: 1px solid #E4E7ED;
@@ -39,24 +39,6 @@
   align-items: center;
   margin-top: 15px;
   margin-bottom: 15px;
-}
-
-.input-content {
-  width: 300px;
-  height: 35px;
-  color: #444;
-  font-size: 16px;
-  font-weight: 400;
-  text-indent: .5rem;
-  border: 1px solid #DCDFE6;
-  border-radius: 4px;
-  transition: all .3s ease;
-}
-
-input:focus {
-  box-shadow: 0 3px 5px 1px #EBEEF5;
-  outline: none;
-  transform: translateY(-3px);
 }
 
 .json {
@@ -95,7 +77,6 @@ input:focus {
 }
 
 .editer-data {
-  width: 355px;
   min-height: 100px;
   padding: 10px;
   background-color: #F2F6FC;
@@ -105,16 +86,14 @@ input:focus {
   color: #444;
   font-size: 16px;
   transition: all .3s ease;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 
 textarea:focus {
   box-shadow: 0 3px 6px 2px #EBEEF5;
   outline: none;
   transform: translateY(-3px);
-}
-
-.editer-result {
-  background: #F2F6FC;
 }
 
 .item-title {
@@ -127,4 +106,8 @@ textarea:focus {
   height: 36px;
   line-height: 36px;
   margin-right: 20px;
+}
+
+.button {
+  margin: 20px;
 }

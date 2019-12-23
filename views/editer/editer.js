@@ -11,23 +11,25 @@ $(document).on('click', '.json-before', function (e) {
     }
 })
 
-// 创建点击
 $(document).on('click', '.addItem-input', function (e) {
     try {
         const val = JSON.parse($('.editer-data').val())
         const inputTreeCreated = valTreeCreate(val)
 
-        $('.editer-input').append(`<form class='formInput'>${inputTreeCreated}</form>`)
+        $('.editer-input').html(`<form class='formInput'>${inputTreeCreated}</form>`)
     } catch {
         console.log('请填写正确的json格式')
     }
 
 })
-// 生产json点击
+
 $(document).on('click', '.addItem-json', function (e) {
     try {
-        // const val = $('.formInput').serializeArray()
         const childArr = $('.formInput').children()
+        if (!childArr.length) {
+            console.log('请生成相应的inputTree')
+            return
+        }
         const inputCreateJson = treeJsonCreate(childArr)
 
         $('.editer-result').text(JSON.stringify(inputCreateJson, null, 4))
@@ -36,6 +38,14 @@ $(document).on('click', '.addItem-json', function (e) {
         console.log(err)
     }
 
+})
+
+$(document).on('keydown', '.editer-data', function (e) {
+    if (e.key !== 'Tab') return
+    event.preventDefault();
+    const text = document.querySelector('.editer-data')
+    text.setRangeText('    ')
+    text.selectionStart += 4;
 })
 
 function valTreeCreate(val) {

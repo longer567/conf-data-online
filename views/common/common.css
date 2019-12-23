@@ -48,3 +48,21 @@ div {
 .text:hover {
     color: #409eff;
 }
+
+input {
+    width: 300px;
+    height: 35px;
+    color: #444;
+    font-size: 16px;
+    font-weight: 400;
+    text-indent: .5rem;
+    border: 1px solid #DCDFE6;
+    border-radius: 4px;
+    transition: all .3s ease;
+}
+
+input:focus {
+    box-shadow: 0 3px 5px 1px #EBEEF5;
+    outline: none;
+    transform: translateY(-3px);
+}
