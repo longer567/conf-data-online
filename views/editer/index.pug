@@ -14,7 +14,8 @@ html
     div.header
       div.header-left 内容配置平台
       div.header-right 创建 
-    div.button button
+    div(class = "button addItem-input") button-input
+    div(class = "button addItem-json") button-json
     div.item-title
       div.name 项目名称
       input(class = "title input-content")
@@ -23,46 +24,46 @@ html
       input(class = "title input-content")
     div.all
       div.editer-input
-        - for( var i=0; i<10; i++ )
-          div.item
-            div.input-title #{i+1}
-            input.input-content(type="text")
-        div.json(index='0'
-          cj='0'
-          show='false'
-        ) xxx 
-          div.json-before
-          div.json-content
-            - for( var i=0; i<4; i++ )
-              div.item
-                div.input-title json#{i+1}
-                input.input-content(type="text")
-            div.json(index='0'
-              cj='0'
-              show='false'
-            ) xxx 
-              div.json-before
-              div.json-content
-                - for( var i=0; i<4; i++ )
-                  div.item
-                    div.input-title json#{i+1}
-                    input.input-content(type="text")
-        div.json(index='1'
-          cj='0'
-          show='false'
-        ) xxx 
-          div.json-before
-          div.json-content
-            - for( var i=0; i<4; i++ )
-              div.item
-                div.input-title json#{i+1}
-                input.input-content(type="text")
+        //- - for( var i=0; i<10; i++ )
+        //-   div.item
+        //-     div.input-title #{i+1}
+        //-     input.input-content(type="text")
+        //- div.json(index='0'
+        //-   cj='0'
+        //-   show='false'
+        //- ) xxx 
+        //-   div.json-before
+        //-   div.json-content
+        //-     - for( var i=0; i<4; i++ )
+        //-       div.item
+        //-         div.input-title json#{i+1}
+        //-         input.input-content(type="text")
+        //-     div.json(index='0'
+        //-       cj='0'
+        //-       show='false'
+        //-     ) xxx 
+        //-       div.json-before
+        //-       div.json-content
+        //-         - for( var i=0; i<4; i++ )
+        //-           div.item
+        //-             div.input-title json#{i+1}
+        //-             input.input-content(type="text")
+        //- div.json(index='1'
+        //-   cj='0'
+        //-   show='false'
+        //- ) xxx 
+        //-   div.json-before
+        //-   div.json-content
+        //-     - for( var i=0; i<4; i++ )
+        //-       div.item
+        //-         div.input-title json#{i+1}
+        //-         input.input-content(type="text")
       textarea.editer-data
       pre.editer-result 
-        | a: {
-        |   b: "bbb",
-        |   c: {
-        |     d: "ddd"
-        |   }
-        | }
+        //- | a: {
+        //- |   b: "bbb",
+        //- |   c: {
+        //- |     d: "ddd"
+        //- |   }
+        //- | }
       
