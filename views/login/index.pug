@@ -13,6 +13,14 @@ html
   body
     div.login
       p.login-header login
-      input.login-name(type = "text" name = "name")
-      input.login-pass(type = "text" name = "pass")
+      input.login-name(type = "text" name = "login-name" value = "")
+      input.login-pass(type = "text" name = "login-pass" value = "")
+      br
+      div(class='submit button') 登录
+    div.sign
+      p.sign-header sign
+      input.sign-name(type = "text" name = "sign-name" value = "")
+      input.sign-pass(type = "text" name = "sign-pass" value = "")
+      br
+      div(class='submit button') 注册
     

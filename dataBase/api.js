@@ -1,4 +1,3 @@
-
 /**
  * 
  * @param {*} collection 
@@ -6,8 +5,8 @@
  * @param {(res) => {}} callback Do something by res
  */
 const insertManyDocuments = (collection, objectArray, callback) => {
-    collection
-      .insertMany(objectArray, (err, result) => callback(result));
+  collection
+    .insertMany(objectArray, (err, result) => callback(result));
 }
 
 /**
@@ -17,13 +16,13 @@ const insertManyDocuments = (collection, objectArray, callback) => {
  * @param {(res) => {}} callback Do something by res
  */
 const insertOneDocument = (collection, objectOne, callback) => {
-    collection
-      .insertOne(objectOne, (err, result) => callback(result));
+  collection
+    .insertOne(objectOne, (err, result) => callback(result));
 }
 
 const findAllDocuments = (collection, callback) => {
-    collection.find({})
-      .toArray((err, docs) => callback(docs));
+  collection.find({})
+    .toArray((err, docs) => callback(docs));
 }
 
 /**
@@ -33,9 +32,9 @@ const findAllDocuments = (collection, callback) => {
  * @param {(res) => {}} callback Do something by res
  */
 const findLineDocument = (collection, object, callback) => {
-    collection
-      .find(object)
-        .toArray((err, docs) => callback(docs))
+  collection
+    .find(object)
+    .toArray((err, docs) => callback(docs))
 }
 
 /**
@@ -46,10 +45,10 @@ const findLineDocument = (collection, object, callback) => {
  * @param {(res) => {}} callback Do something by res
  */
 const updateOneDocument = (collection, aim, to, callback) => {
-    collection
-        .updateOne(aim, {
-            $set: to
-        }, (err, result) => callback(result))
+  collection
+    .updateOne(aim, {
+      $set: to
+    }, (err, result) => callback(result))
 }
 
 /**
@@ -59,8 +58,26 @@ const updateOneDocument = (collection, aim, to, callback) => {
  * @param {(res) => {}} callback Do something by res
  */
 const removeOneDocument = (collection, object, callback) => {
-    collection
-      .deleteOne(object, (err, res) => callback(res))
+  collection
+    .deleteOne(object, (err, res) => callback(res))
 }
 
-module.exports = { insertManyDocuments, findAllDocuments, findLineDocument, updateOneDocument, removeOneDocument, insertOneDocument }
+const createCollectionIndex = (collection, object, callback) => {
+  collection
+    .createIndex(object, {
+        unique: true,
+        background: true
+      },
+      (err, res) => callback(res)
+    )
+}
+
+module.exports = {
+  insertManyDocuments,
+  findAllDocuments,
+  findLineDocument,
+  updateOneDocument,
+  removeOneDocument,
+  insertOneDocument,
+  createCollectionIndex
+}

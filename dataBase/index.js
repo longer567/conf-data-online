@@ -7,20 +7,34 @@ const {
     dbName
 } = config.get("dataBase")
 
+const db = async () => {
+    const client = await MongoClient.connect(url, {
+        useUnifiedTopology: true
+    })
+    return client.db(dbName)
+}
+
 /**
  * 
  * @param {string} documents Operated documentName in dataBase
  * @returns {object} MongoClient collection
  */
 const collection = async (documents) => {
-    const client = await MongoClient.connect(url, {
-        useUnifiedTopology: true
-    })
-    console.log('mongo connect success!')
-    const db = client.db(dbName)
-    const collection = db.collection(documents)
+    try {
+        const client = await MongoClient.connect(url, {
+            useUnifiedTopology: true
+        })
+        const db = client.db(dbName)
+        const coll = db.collection(documents)
 
-    return collection
+        return coll
+    } catch (error) {
+        throw new Error(error)
+    }
 }
 
-module.exports = { collection, API }
+module.exports = {
+    db,
+    collection,
+    API
+}

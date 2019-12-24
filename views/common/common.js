@@ -20,8 +20,11 @@ const request = (url, data = "", type = "GET") => {
     })
 }
 
+const getUrlParams = (url, param) => (new URL(url)).searchParams.get(param)
+
 const API_BASE = '//localhost:3000/'
 const api = {
     find: `${API_BASE}find`,
-    addItem: `${API_BASE}addItem`
+    addItem: `${API_BASE}addItem`,
+    sign: `${API_BASE}signUser`
 }

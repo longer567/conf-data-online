@@ -16,4 +16,6 @@ routerPage.get('/login', (req, res) => {
     res.render(viewsPath('login'))
 })
 
-module.exports = { routerPage }
+module.exports = {
+    routerPage
+}
