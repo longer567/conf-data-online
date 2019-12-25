@@ -2,15 +2,15 @@
  * 
  * @param {number} status 
  * @param {string} msg 
- * @param {string} result 
+ * @param {object} data 
  */
-const msg = (status, msg, result) => {
+const msg = (status, msg, data) => {
     let temp = {
         status,
         msg
     }
-    if (result !== undefined)
-        temp.result = result
+    if (data !== undefined)
+        temp.data = data
     return temp
 }
 

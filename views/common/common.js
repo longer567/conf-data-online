@@ -10,10 +10,15 @@ const request = (url, data = "", type = "GET") => {
             type,
             url,
             data,
+            headers: {
+                "Authorization": window.localStorage.getItem('token')
+            },
             success(params) {
+                console.log(params)
                 resolve(params)
             },
             error(xhr, type) {
+                console.log(xhr)
                 reject(xhr, type)
             }
         })
@@ -24,7 +29,8 @@ const getUrlParams = (url, param) => (new URL(url)).searchParams.get(param)
 
 const API_BASE = '//localhost:3000/'
 const api = {
-    find: `${API_BASE}find`,
+    findUserAllItems: `${API_BASE}findUserAllItems`,
     addItem: `${API_BASE}addItem`,
-    sign: `${API_BASE}signUser`
+    sign: `${API_BASE}signUser`,
+    login: `${API_BASE}loginUser`,
 }

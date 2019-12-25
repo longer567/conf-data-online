@@ -23,7 +23,22 @@ $(document).ready(() => {
             });
         } else {
             // 登录
-
+            request(api.login, data, 'POST').then((result) => {
+                const {
+                    status,
+                    msg,
+                    data
+                } = result
+                if (status === 200) {
+                    for (let i in data) {
+                        window.localStorage.setItem(i, data[i])
+                    }
+                    window.location.href = `${API_BASE}index`
+                    console.log(window.localStorage)
+                } else {
+                    console.log(msg)
+                }
+            })
         }
     })
 })
