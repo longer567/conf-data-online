@@ -1,5 +1,24 @@
 let inputCreateJson
 
+loginPermission(() => {
+    $(document).on('click', '.addItem-add', function (e) {
+        const itemTitle = $('.itemName').val().trim()
+        // const itemOwn = $('.itemOwn').val().trim()
+        if (!itemTitle || !inputCreateJson) {
+            console.log('项目名称 output内容不能为空')
+            return
+        }
+        request(api.addItem, {
+            ownName: window.localStorage.getItem('name'),
+            itemTitle,
+            itemContent: JSON.stringify(inputCreateJson),
+            date: (new Date()).getTime()
+        }, 'POST').then(res => {
+
+        })
+    })
+})
+
 $(document).on('click', '.json-before', function (e) {
     let nowJsonDom = $($(e.target).parents()[0]);
     if (nowJsonDom.attr('show') === 'true') {
@@ -50,23 +69,6 @@ $(document).on('keydown', '.editer-data', function (e) {
     text.selectionStart += 4;
 })
 
-$(document).on('click', '.addItem-add', function (e) {
-    const itemTitle = $('.itemName').val().trim()
-    // const itemOwn = $('.itemOwn').val().trim()
-    if (!itemTitle || !inputCreateJson) {
-        console.log('项目名称 output内容不能为空')
-        return
-    }
-    request(api.addItem, {
-        ownName: window.localStorage.getItem('name'),
-        itemTitle,
-        itemContent: JSON.stringify(inputCreateJson),
-        date: (new Date()).getTime()
-    }, 'POST').then(res => {
-
-    })
-})
-
 function valTreeCreate(val) {
     let domTemp = ''
     for (let i in val) {
@@ -107,4 +109,3 @@ function treeJsonCreate(childArr) {
     }
     return jsonTemp
 }
-

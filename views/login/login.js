@@ -16,14 +16,14 @@ $(document).ready(() => {
         }
         if (loginEle) {
             // 注册
-            request(api.sign, data, 'POST').then((result) => {
+            request(api.sign, data, 'POST').then(result => {
                 console.log(result)
             }).catch((err) => {
 
             });
         } else {
             // 登录
-            request(api.login, data, 'POST').then((result) => {
+            request(api.login, data, 'POST').then(result => {
                 const {
                     status,
                     msg,

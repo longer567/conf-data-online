@@ -1,25 +1,26 @@
 $(document).ready(() => {
-    request(api.findUserAllItems, {
-        name: window.localStorage.getItem('name'),
-    }, 'POST').then((result) => {
-        const {
-            status,
-            msg,
-            data
-        } = result
-        console.log(status === 200)
-        if (status === 200) {
-            let tempDom = ``
-            data.forEach(i => {
-                const {
-                    hash,
-                    itemTitle,
-                    itemPath,
-                    date,
-                    ownName
-                } = i
-                tempDom +=
-                    `<div class="item">
+    loginPermission(() => {
+        request(api.findUserAllItems, {
+            name: window.localStorage.getItem('name'),
+        }, 'POST').then(result => {
+            const {
+                status,
+                msg,
+                data
+            } = result
+            console.log(status === 200)
+            if (status === 200) {
+                let tempDom = ``
+                data.forEach(i => {
+                    const {
+                        hash,
+                        itemTitle,
+                        itemPath,
+                        date,
+                        ownName
+                    } = i
+                    tempDom +=
+                        `<div class="item">
                         <div class = "item-name text">${itemTitle}</div>
                         <div class = "text">创建者${ownName}</div>
                         <div class = "text">创建日期${formatDate(new Date(Number(date)))}</div>
@@ -27,12 +28,13 @@ $(document).ready(() => {
                         <div class = "item-delete text" hash="${hash}">删除</div>
                         <div class = "watch-item-js text" itemPath="${itemPath}">查看线上js</div>                    
                     </div>`
-            })
-            $('.content').append(tempDom)
-        } else {
-            alert(`登录失败${msg}`)
-            window.location.href = `${API_BASE}/login`
-        }
+                })
+                $('.content').append(tempDom)
+            } else {
+                alert(`登录失败${msg}`)
+                window.location.href = `${API_BASE}/login`
+            }
+        })
     })
 })
 $(document).on('click', '.header-right', function (e) {

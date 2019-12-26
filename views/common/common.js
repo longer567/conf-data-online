@@ -33,4 +33,22 @@ const api = {
     addItem: `${API_BASE}/addItem`,
     sign: `${API_BASE}/signUser`,
     login: `${API_BASE}/loginUser`,
+    isLogin: `${API_BASE}/isLogin`
+}
+
+const loginPermission = async (callback) => {
+    const result = await request(api.isLogin, {
+        name: window.localStorage.getItem('name')
+    }, 'POST')
+    const {
+        status,
+        msg
+    } = result
+    if (status === 199) {
+        alert(msg)
+        window.location.href = `${API_BASE}/login`
+    }else{
+        // status === 200
+        callback()
+    }
 }

@@ -9,6 +9,7 @@ An configuration for data in online
 ##### 可输入数据格式
 
 ```json{
+{
     "a": {
         "title": "活动标题1",
         "value": "111"
@@ -43,5 +44,6 @@ An configuration for data in online
             }
         }
     }
+}
 }
 ```

@@ -13,6 +13,9 @@ const {
     collection,
     API
 } = require('../../dataBase')
+const {
+    checkToken
+} = require('../util')
 const rootPath = process.cwd()
 
 routerRequest.post('/signUser', async (req, res) => {
@@ -128,8 +131,9 @@ routerRequest.post('/findUserAllItems', async (req, res) => {
     const {
         name
     } = req.body
-    const collDoc = await collection('documents')
     const collUse = await collection('users')
+    const collDoc = await collection('documents')
+
     API.findLineDocument(collUse, {
         name
     }, findResult => {
@@ -144,6 +148,15 @@ routerRequest.post('/findUserAllItems', async (req, res) => {
             console.log(findItemResult)
             res.send(msg(200, 'success', findItemResult))
         })
+    })
+})
+
+routerRequest.post('/isLogin', async (req, res) => {
+    const {
+        name
+    } = req.body
+    checkToken(req, res, jwt, name, jwtKey, () => {
+        res.send(msg(200, 'login success'))
     })
 })
 

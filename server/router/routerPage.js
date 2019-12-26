@@ -5,15 +5,21 @@ const viewsPath = (filename) => path.resolve(process.cwd() + '/views', filename)
 
 routerPage.get('/', (req, res) => {
     res.redirect('/index')
-})
-routerPage.get('/index', (req, res) => {
-    res.render(viewsPath('index'))
-})
-routerPage.get('/editer', (req, res) => {
-    res.render(viewsPath('editer'))
-})
-routerPage.get('/login', (req, res) => {
-    res.render(viewsPath('login'))
+});
+[{
+    pagePath: '/index',
+    renderPath: 'index'
+}, {
+    pagePath: '/editer',
+    renderPath: 'editer'
+}, {
+    pagePath: '/login',
+    renderPath: 'login'
+}].forEach(i => {
+    console.log(i)
+    routerPage.get(i.pagePath, (req, res) => {
+        res.render(viewsPath(i.renderPath))
+    })
 })
 
 module.exports = {
