@@ -33,7 +33,7 @@ $(document).ready(() => {
                     for (let i in data) {
                         window.localStorage.setItem(i, data[i])
                     }
-                    window.location.href = `${API_BASE}index`
+                    window.location.href = `${API_BASE}/index`
                     console.log(window.localStorage)
                 } else {
                     console.log(msg)

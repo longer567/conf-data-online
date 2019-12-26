@@ -67,25 +67,25 @@ routerRequest.post('/loginUser', async (req, res) => {
     })
 })
 
-routerRequest.post('/findUserAllItems', async (req, res) => {
-    const {
-        name
-    } = req.body
-    const token = req.get("Authorization")
-    if (token) {
-        jwt.verify(token, jwtKey, (err, decodeToken) => {
-            if (decodeToken === name) {
-                res.send(msg(200, 'success'))
-            } else {
-                // token失效（name token不符）
-                res.send(msg(199, 'token失效'))
-            }
-        })
-    } else {
-        // 未登录
-        res.send(msg(199, '未登录'))
-    }
-})
+// routerRequest.post('/findUserAllItems', async (req, res) => {
+//     const {
+//         name
+//     } = req.body
+//     const token = req.get("Authorization")
+//     if (token) {
+//         jwt.verify(token, jwtKey, (err, decodeToken) => {
+//             if (decodeToken === name) {
+//                 res.send(msg(200, 'success'))
+//             } else {
+//                 // token失效（name token不符）
+//                 res.send(msg(199, 'token失效'))
+//             }
+//         })
+//     } else {
+//         // 未登录
+//         res.send(msg(199, '未登录'))
+//     }
+// })
 
 routerRequest.post('/addItem', async (req, res) => {
     const {
@@ -122,6 +122,29 @@ routerRequest.post('/addItem', async (req, res) => {
             }))
         })
     }))
+})
+
+routerRequest.post('/findUserAllItems', async (req, res) => {
+    const {
+        name
+    } = req.body
+    const collDoc = await collection('documents')
+    const collUse = await collection('users')
+    API.findLineDocument(collUse, {
+        name
+    }, findResult => {
+        const itemsHashArr = findResult[0].itemsHash.map(i => {
+            return {
+                hash: i
+            }
+        })
+        API.findLineDocument(collDoc, {
+            $or: itemsHashArr
+        }, findItemResult => {
+            console.log(findItemResult)
+            res.send(msg(200, 'success', findItemResult))
+        })
+    })
 })
 
 module.exports = {
