@@ -11,11 +11,13 @@
 .header-left {
     font-size: 16px;
     margin-left: 100px;
+    cursor: pointer;
 }
 
 .header-right {
     font-size: 16px;
-    margin-right: 16px;
+    margin-right: 100px;
+    cursor: pointer;
 }
 
 .content {

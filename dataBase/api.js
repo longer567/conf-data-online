@@ -41,14 +41,12 @@ const findLineDocument = (collection, object, callback) => {
  * 
  * @param {*} collection 
  * @param {object} aim Want to update aim object
- * @param {object} to Provided replacement
+ * @param {object} options poly
  * @param {(res) => {}} callback Do something by res
  */
-const updateOneDocument = (collection, aim, to, callback) => {
+const updateOneDocument = (collection, aim, options, callback) => {
   collection
-    .updateOne(aim, {
-      $set: to
-    }, (err, result) => callback(result))
+    .updateOne(aim, options, (err, result) => callback(result))
 }
 
 /**

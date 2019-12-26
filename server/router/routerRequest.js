@@ -1,3 +1,5 @@
+const fs = require('fs')
+const path = require('path')
 const config = require('config')
 const uuidV4 = require('uuid/v4')
 const express = require('express')
@@ -11,20 +13,7 @@ const {
     collection,
     API
 } = require('../../dataBase')
-
-routerRequest.post('/addItem', async (req, res) => {
-    const {
-        itemName,
-        itemContent
-    } = req.body
-    API.insertOneDocument(await collection('documents'), {
-        hash: uuidV4.split('-').slicee(0, 3),
-        itemName,
-        itemContent
-    }, (result => {
-        res.send(result)
-    }))
-})
+const rootPath = process.cwd()
 
 routerRequest.post('/signUser', async (req, res) => {
     const {
@@ -41,6 +30,7 @@ routerRequest.post('/signUser', async (req, res) => {
             API.insertOneDocument(coll, {
                 name,
                 pass,
+                itemsHash: []
             }, insertResult => {
                 API.createCollectionIndex(coll, {
                     name
@@ -95,6 +85,43 @@ routerRequest.post('/findUserAllItems', async (req, res) => {
         // 未登录
         res.send(msg(199, '未登录'))
     }
+})
+
+routerRequest.post('/addItem', async (req, res) => {
+    const {
+        itemTitle,
+        itemContent,
+        ownName,
+        date
+    } = req.body
+    const collDoc = await collection('documents')
+    const collUse = await collection('users')
+    const hash = uuidV4().split('-').slice(0, 3).join('')
+    const itemName = itemTitle + '-' + hash
+    const itemPath = path.resolve(rootPath, `/public/jsItems/${itemName}.js`)
+    API.insertOneDocument(collDoc, {
+        hash,
+        ownName,
+        itemTitle,
+        itemName,
+        itemPath,
+        date
+    }, (insertItemResult => {
+        API.updateOneDocument(collUse, {
+            name: ownName
+        }, {
+            $push: {
+                itemsHash: hash
+            }
+        }, updateResult => {
+
+            fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemName}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
+
+            res.send(msg(200, 'success', {
+                item: `${itemName}.js`,
+            }))
+        })
+    }))
 })
 
 module.exports = {

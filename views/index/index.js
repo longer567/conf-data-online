@@ -8,10 +8,15 @@ $(document).ready(() => {
         } = result
         console.log(status === 200)
         if (status === 200) {
-            console.log('success')
+            
+            
+
         } else {
             alert(`登录失败${msg}`)
             window.location.href = `${API_BASE}login`
         }
     })
+})
+$(document).on('click', '.header-right', function(e) {
+    window.location.href = `${API_BASE}editer`
 })
