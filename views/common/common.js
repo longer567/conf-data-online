@@ -33,7 +33,8 @@ const api = {
     addItem: `${API_BASE}/addItem`,
     sign: `${API_BASE}/signUser`,
     login: `${API_BASE}/loginUser`,
-    isLogin: `${API_BASE}/isLogin`
+    isLogin: `${API_BASE}/isLogin`,
+    editerAuth: `${API_BASE}/editerAuth`
 }
 
 const loginPermission = async (callback) => {

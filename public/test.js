@@ -6,6 +6,13 @@ var dataJson = {
         "f": "444"
     }
 }
+
+var small = {
+    "a": {
+        "title": "活动标题1",
+        "value": "111"
+    }
+}
 var inputData = {
     "a": {
         "title": "活动标题1",

@@ -1,23 +1,58 @@
-let inputCreateJson
+let inputCreateJson, inputTreeCreated, originValue
 
-loginPermission(() => {
-    $(document).on('click', '.addItem-add', function (e) {
-        const itemTitle = $('.itemName').val().trim()
-        // const itemOwn = $('.itemOwn').val().trim()
-        if (!itemTitle || !inputCreateJson) {
-            console.log('项目名称 output内容不能为空')
-            return
-        }
-        request(api.addItem, {
-            ownName: window.localStorage.getItem('name'),
-            itemTitle,
-            itemContent: JSON.stringify(inputCreateJson),
-            date: (new Date()).getTime()
-        }, 'POST').then(res => {
+loginPermission(async () => {
+    const itemHash = getUrlParams(window.location.href, 'itemHash')
+    const itemTitle = getUrlParams(window.location.href, 'itemTitle')
+    if (itemHash && itemTitle) {
+        const originJsonContent = await request(`${API_BASE}/originValue/${itemTitle}-${itemHash}-origin.json`)
+        console.log(originJsonContent)
+        $('.itemName').val(itemTitle)
+        $('.editer-data').html(JSON.stringify(originJsonContent, null, 4))
+        contentRender()
 
+        $(document).on('click', '.addItem-add', function (e) {
+            if (!inputCreateJson) {
+                console.log('output内容不能为空')
+                return
+            }
+            // editer authority
+            request(api.editerAuth, {
+                name: window.localStorage.getItem('name'),
+                hash: itemHash,
+                itemTitle,
+                inputCreateJson
+            }, 'POST').then(result => {
+                if (result.status === 200) {
+
+                } else {
+                    alert('您无权编辑该项目')
+                    window.location.href = `${API_BASE}/index`
+                }
+            })
         })
-    })
+    } else {
+        // create
+        $(document).on('click', '.addItem-add', function (e) {
+            const itemTitle = $('.itemName').val().trim()
+            // const itemOwn = $('.itemOwn').val().trim()
+            if (!itemTitle || !inputCreateJson) {
+                console.log('项目名称 output内容不能为空')
+                return
+            }
+            request(api.addItem, {
+                ownName: window.localStorage.getItem('name'),
+                itemTitle,
+                itemContent: JSON.stringify(inputCreateJson),
+                date: (new Date()).getTime(),
+                originValue: JSON.stringify(originValue)
+            }, 'POST').then(res => {
+
+            })
+        })
+    }
 })
+
+
 
 $(document).on('click', '.json-before', function (e) {
     let nowJsonDom = $($(e.target).parents()[0]);
@@ -32,34 +67,34 @@ $(document).on('click', '.json-before', function (e) {
     }
 })
 
-$(document).on('click', '.addItem-input', function (e) {
-    try {
-        const val = JSON.parse($('.editer-data').val())
-        const inputTreeCreated = valTreeCreate(val)
+// $(document).on('click', '.addItem-input', function (e) {
+//     try {
+//         originValue = JSON.parse($('.editer-data').val())
+//         inputTreeCreated = valTreeCreate(originValue)
 
-        $('.editer-input').html(`<form class='formInput'>${inputTreeCreated}</form>`)
-    } catch {
-        console.log('请填写正确的json格式')
-    }
+//         $('.editer-input').html(`<form class='formInput'>${inputTreeCreated}</form>`)
+//     } catch {
+//         console.log('请填写正确的json格式')
+//     }
 
-})
+// })
 
-$(document).on('click', '.addItem-json', function (e) {
-    try {
-        const childArr = $('.formInput').children()
-        if (!childArr.length) {
-            console.log('请生成相应的inputTree')
-            return
-        }
-        inputCreateJson = treeJsonCreate(childArr)
+// $(document).on('click', '.addItem-json', function (e) {
+//     try {
+//         const childArr = $('.formInput').children()
+//         if (!childArr.length) {
+//             console.log('请生成相应的inputTree')
+//             return
+//         }
+//         inputCreateJson = treeJsonCreate(childArr)
 
-        $('.editer-result').text(JSON.stringify(inputCreateJson, null, 4))
+//         $('.editer-result').text(JSON.stringify(inputCreateJson, null, 4))
 
-    } catch (err) {
-        console.log(err)
-    }
+//     } catch (err) {
+//         console.log(err)
+//     }
 
-})
+// })
 
 $(document).on('keydown', '.editer-data', function (e) {
     if (e.key !== 'Tab') return
@@ -68,6 +103,26 @@ $(document).on('keydown', '.editer-data', function (e) {
     text.setRangeText('    ')
     text.selectionStart += 4;
 })
+$(document).on('keyup', '.editer-data', function (e) {
+    contentRender()
+})
+
+function contentRender() {
+    try {
+        originValue = JSON.parse($('.editer-data').val())
+
+        inputTreeCreated = valTreeCreate(originValue)
+        $('.editer-input').html(`<form class='formInput'>${inputTreeCreated}</form>`)
+
+        const childArr = $('.formInput').children()
+        inputCreateJson = treeJsonCreate(childArr)
+        if (Object.keys(inputCreateJson).length) $('.editer-result').text(JSON.stringify(inputCreateJson, null, 4))
+    } catch {
+        $('.editer-input').html('')
+        $('.editer-result').text('')
+        console.log('请填写正确的json格式')
+    }
+}
 
 function valTreeCreate(val) {
     let domTemp = ''

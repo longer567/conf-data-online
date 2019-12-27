@@ -95,20 +95,23 @@ routerRequest.post('/addItem', async (req, res) => {
         itemTitle,
         itemContent,
         ownName,
-        date
+        date,
+        originValue
     } = req.body
     const collDoc = await collection('documents')
     const collUse = await collection('users')
     const hash = uuidV4().split('-').slice(0, 3).join('')
     const itemName = itemTitle + '-' + hash
-    const itemPath = path.resolve(rootPath, `/public/jsItems/${itemName}.js`)
+    const itemPath = path.resolve(rootPath, `./public/jsItems/${itemName}.js`)
+    const originPath = path.resolve(rootPath, `./public/originValue/${itemName}-origin.json`)
     API.insertOneDocument(collDoc, {
         hash,
         ownName,
         itemTitle,
         itemName,
         itemPath,
-        date
+        date,
+        originPath
     }, (insertItemResult => {
         API.updateOneDocument(collUse, {
             name: ownName
@@ -118,7 +121,8 @@ routerRequest.post('/addItem', async (req, res) => {
             }
         }, updateResult => {
 
-            fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemName}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
+            fs.writeFileSync(itemPath, `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
+            fs.writeFileSync(originPath, `${originValue}`)
 
             res.send(msg(200, 'success', {
                 item: `${itemName}.js`,
@@ -146,7 +150,7 @@ routerRequest.post('/findUserAllItems', async (req, res) => {
             $or: itemsHashArr
         }, findItemResult => {
             console.log(findItemResult)
-            res.send(msg(200, 'success', findItemResult))
+            res.send(msg(200, 'success', findItemResult || []))
         })
     })
 })
@@ -157,6 +161,27 @@ routerRequest.post('/isLogin', async (req, res) => {
     } = req.body
     checkToken(req, res, jwt, name, jwtKey, () => {
         res.send(msg(200, 'login success'))
+    })
+})
+
+routerRequest.post('/editerAuth', async (req, res) => {
+    const {
+        name,
+        hash,
+        itemContent,
+        itemTitle
+    } = req.body
+    const collUse = await collection('users')
+    checkToken(req, res, jwt, name, jwtKey, () => {
+        API.findLineDocument(collUse, {
+            name
+        }, findResult => {
+            if (findResult.itemsHash.includes(hash)){
+                // fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}_${hash}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
+            }else{
+                res.send(msg(200, '修改失败,您无权限修改'))
+            }
+        })
     })
 })
 

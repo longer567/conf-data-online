@@ -15,18 +15,18 @@ $(document).ready(() => {
                     const {
                         hash,
                         itemTitle,
-                        itemPath,
                         date,
-                        ownName
+                        ownName,
+                        itemName
                     } = i
                     tempDom +=
                         `<div class="item">
                         <div class = "item-name text">${itemTitle}</div>
                         <div class = "text">创建者${ownName}</div>
                         <div class = "text">创建日期${formatDate(new Date(Number(date)))}</div>
-                        <div class = "item-edit text" hash="${hash}">编辑</div> 
+                        <div class = "item-edit text" hash="${hash}" itemTitle="${itemTitle}">编辑</div> 
                         <div class = "item-delete text" hash="${hash}">删除</div>
-                        <div class = "watch-item-js text" itemPath="${itemPath}">查看线上js</div>                    
+                        <div class = "watch-item-js text" itemPath="/jsItems/${itemName}.js">查看线上js</div>                    
                     </div>`
                 })
                 $('.content').append(tempDom)
@@ -43,6 +43,10 @@ $(document).on('click', '.header-right', function (e) {
 
 $(document).on('click', '.watch-item-js', function (e) {
     window.open(API_BASE + $(this).attr('itemPath'))
+})
+
+$(document).on('click', '.item-edit', function (e) {
+    window.location.href = `${API_BASE}/editer?itemHash=${$(this).attr('hash')}&itemTitle=${$(this).attr('itemTitle')}`
 })
 
 const formatDate = (timer) => {
