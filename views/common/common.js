@@ -53,3 +53,7 @@ const loginPermission = async (callback) => {
         callback()
     }
 }
+
+$(document).on('click', '.header-left', (e) => {
+    window.location.href = `${API_BASE}`
+})

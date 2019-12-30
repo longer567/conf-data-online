@@ -96,7 +96,8 @@ routerRequest.post('/addItem', async (req, res) => {
         itemContent,
         ownName,
         date,
-        originValue
+        originValue,
+        itemGroups
     } = req.body
     const collDoc = await collection('documents')
     const collUse = await collection('users')
@@ -111,7 +112,8 @@ routerRequest.post('/addItem', async (req, res) => {
         itemName,
         itemPath,
         date,
-        originPath
+        originPath,
+        itemGroups
     }, (insertItemResult => {
         API.updateOneDocument(collUse, {
             name: ownName
@@ -122,7 +124,7 @@ routerRequest.post('/addItem', async (req, res) => {
         }, updateResult => {
 
             fs.writeFileSync(itemPath, `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
-            fs.writeFileSync(originPath, `${originValue}`)
+            fs.writeFileSync(originPath, originValue)
 
             res.send(msg(200, 'success', {
                 item: `${itemName}.js`,
@@ -169,15 +171,48 @@ routerRequest.post('/editerAuth', async (req, res) => {
         name,
         hash,
         itemContent,
-        itemTitle
+        originValue,
+        itemTitle,
+        itemGroups
     } = req.body
     const collUse = await collection('users')
+    const collDoc = await collection('documents')
     checkToken(req, res, jwt, name, jwtKey, () => {
+        API.findLineDocument(collDoc, {
+            hash
+        }, findDocResult => {
+            // find delete mumbers
+            const deleteMember = findDocResult[0].itemGroups.map(i => !itemGroups.includes(i))
+            // update collDoc itemGroups
+            API.updateOneDocument(collDoc, {
+                itemGroups
+            }, {
+                $set: {
+                    itemGroups
+                }
+            }, async updateDocResult => {
+                // i delete name
+                await deleteMember.forEach(i => {
+                    API.updateOneDocument(collUse, {
+                        name: i
+                    }, {
+                        $pull: {
+                            
+                        }
+                    })
+                })
+
+                // xxx
+            })
+        })
         API.findLineDocument(collUse, {
             name
         }, findResult => {
-            if (findResult.itemsHash.includes(hash)){
-                // fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}_${hash}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
+            if (findResult[0].itemsHash.includes(hash)){
+                fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}-${hash}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
+                fs.writeFileSync(path.resolve(rootPath, `./public/originValue/${itemTitle}-${hash}-origin.json`), originValue)
+
+                res.send(msg(200, '修改完成'))
             }else{
                 res.send(msg(200, '修改失败,您无权限修改'))
             }

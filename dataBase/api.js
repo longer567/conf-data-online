@@ -44,7 +44,7 @@ const findLineDocument = (collection, object, callback) => {
  * @param {object} options poly
  * @param {(res) => {}} callback Do something by res
  */
-const updateOneDocument = (collection, aim, options, callback) => {
+const updateOneDocument = (collection, aim, options = {}, callback) => {
   collection
     .updateOne(aim, options, (err, result) => callback(result))
 }

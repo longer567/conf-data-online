@@ -16,7 +16,6 @@ routerPage.get('/', (req, res) => {
     pagePath: '/login',
     renderPath: 'login'
 }].forEach(i => {
-    console.log(i)
     routerPage.get(i.pagePath, (req, res) => {
         res.render(viewsPath(i.renderPath))
     })

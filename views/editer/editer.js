@@ -5,8 +5,8 @@ loginPermission(async () => {
     const itemTitle = getUrlParams(window.location.href, 'itemTitle')
     if (itemHash && itemTitle) {
         const originJsonContent = await request(`${API_BASE}/originValue/${itemTitle}-${itemHash}-origin.json`)
-        console.log(originJsonContent)
         $('.itemName').val(itemTitle)
+        const itemGroups = $('.itemOwn').val().trim().split('')
         $('.editer-data').html(JSON.stringify(originJsonContent, null, 4))
         contentRender()
 
@@ -20,10 +20,12 @@ loginPermission(async () => {
                 name: window.localStorage.getItem('name'),
                 hash: itemHash,
                 itemTitle,
-                inputCreateJson
+                itemContent: JSON.stringify(inputCreateJson),
+                originValue: JSON.stringify(originValue),
+                itemGroups
             }, 'POST').then(result => {
                 if (result.status === 200) {
-
+                    console.log(result)
                 } else {
                     alert('您无权编辑该项目')
                     window.location.href = `${API_BASE}/index`
@@ -34,7 +36,7 @@ loginPermission(async () => {
         // create
         $(document).on('click', '.addItem-add', function (e) {
             const itemTitle = $('.itemName').val().trim()
-            // const itemOwn = $('.itemOwn').val().trim()
+            const itemGroups = $('.itemOwn').val().trim().split('')
             if (!itemTitle || !inputCreateJson) {
                 console.log('项目名称 output内容不能为空')
                 return
@@ -42,6 +44,7 @@ loginPermission(async () => {
             request(api.addItem, {
                 ownName: window.localStorage.getItem('name'),
                 itemTitle,
+                itemGroups,
                 itemContent: JSON.stringify(inputCreateJson),
                 date: (new Date()).getTime(),
                 originValue: JSON.stringify(originValue)
@@ -66,35 +69,6 @@ $(document).on('click', '.json-before', function (e) {
         nowJsonDom.attr('show', 'true')
     }
 })
-
-// $(document).on('click', '.addItem-input', function (e) {
-//     try {
-//         originValue = JSON.parse($('.editer-data').val())
-//         inputTreeCreated = valTreeCreate(originValue)
-
-//         $('.editer-input').html(`<form class='formInput'>${inputTreeCreated}</form>`)
-//     } catch {
-//         console.log('请填写正确的json格式')
-//     }
-
-// })
-
-// $(document).on('click', '.addItem-json', function (e) {
-//     try {
-//         const childArr = $('.formInput').children()
-//         if (!childArr.length) {
-//             console.log('请生成相应的inputTree')
-//             return
-//         }
-//         inputCreateJson = treeJsonCreate(childArr)
-
-//         $('.editer-result').text(JSON.stringify(inputCreateJson, null, 4))
-
-//     } catch (err) {
-//         console.log(err)
-//     }
-
-// })
 
 $(document).on('keydown', '.editer-data', function (e) {
     if (e.key !== 'Tab') return
