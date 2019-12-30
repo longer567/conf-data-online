@@ -183,9 +183,11 @@ routerRequest.post('/editerAuth', async (req, res) => {
         }, findDocResult => {
             // find delete mumbers
             const deleteMember = findDocResult[0].itemGroups.map(i => !itemGroups.includes(i))
+            // find add mumbers
+            const addMember = itemGroups.map(i => !findDocResult[0].itemGroups.include(i))
             // update collDoc itemGroups
             API.updateOneDocument(collDoc, {
-                itemGroups
+                hash
             }, {
                 $set: {
                     itemGroups
@@ -197,12 +199,22 @@ routerRequest.post('/editerAuth', async (req, res) => {
                         name: i
                     }, {
                         $pull: {
-                            
+                            itemsHash: hash
+                        }
+                    })
+                })
+                await addMember.forEach(i => {
+                    API.updateOneDocument(collUse, {
+                        name: i
+                    }, {
+                        $push: {
+                            itemsHash: hash
                         }
                     })
                 })
 
                 // xxx
+
             })
         })
         API.findLineDocument(collUse, {
