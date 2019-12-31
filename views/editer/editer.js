@@ -80,6 +80,13 @@ $(document).on('keydown', '.editer-data', function (e) {
 $(document).on('keyup', '.editer-data', function (e) {
     contentRender()
 })
+$(document).on('keyup', '.editer-input input', function (e) {
+    const childArr = $('.formInput').children()
+    inputCreateJson = treeJsonCreate(childArr)
+    originJsonContent = treeInputCreate(childArr)
+    if (Object.keys(inputCreateJson).length) $('.editer-result').text(JSON.stringify(inputCreateJson, null, 4))
+    $('.editer-data').val(JSON.stringify(originJsonContent, null, 4))
+})
 
 function contentRender() {
     try {
@@ -103,7 +110,7 @@ function valTreeCreate(val) {
     for (let i in val) {
         if (['string', 'number'].includes(val[i].value) || ['string', 'number'].includes(typeof val[i].value)) {
             domTemp += `<div class='item'>
-                    <div class='input-title'>
+                    <div class='input-title' title='${val[i].title}'>
                         ${val[i].title} (${i})
                     </div>
                     <input class='input-content'
@@ -113,7 +120,7 @@ function valTreeCreate(val) {
                     </input>
                 </div>`
         } else if (['object'].includes(val[i].value) || ['object'].includes(typeof val[i].value)) {
-            domTemp += `<div class='json' show='false'>${val[i].title} (${i})
+            domTemp += `<div class='json' show='false' title='${val[i].title}'>${val[i].title} (${i})
                     <div class = 'json-before'></div>
                     <div class = 'json-content' name='${i}'>
                         ${valTreeCreate(val[i].value)}
@@ -137,4 +144,40 @@ function treeJsonCreate(childArr) {
         }
     }
     return jsonTemp
+}
+
+function treeInputCreate(childArr) {
+    let jsonTemp = {}
+    for (let i in childArr) {
+        const className = childArr[i].className
+        if (className === 'item') {
+            const itemChildren = $($(childArr[i]).children('.input-content')[0])
+            const itemTitle = $($(childArr[i]).children('.input-title')[0]).attr('title')
+
+            jsonTemp[itemChildren.attr('name')] = {
+                title: itemTitle,
+                value: itemChildren.val()
+            }
+        } else if (className === 'json') {
+            const itemChildren = $($(childArr[i]).children('.json-content')[0])
+            const itemTitle = $(childArr[i]).attr('title')
+
+            jsonTemp[itemChildren.attr('name')] = {
+                title: itemTitle,
+                value: treeInputCreate(itemChildren.children())
+            }
+        }
+    }
+    return jsonTemp
+}
+
+function isJSON(str) {
+    if (typeof str == 'string') {
+        try {
+            JSON.parse(str);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
 }
