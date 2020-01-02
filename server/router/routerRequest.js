@@ -72,16 +72,28 @@ routerRequest.post('/loginUser', async (req, res) => {
 
 routerRequest.post('/test', async (req, res) => {
     const {
-        name
+        itemGroups
     } = req.body
     const collUse = await collection('users')
     const collDoc = await collection('documents')
 
-    API.findLineDocument(collUse, {
-        name
-    }, result => {
-        res.send(result)
+    Promise.all(itemGroups.map(async i => new Promise((res, rej) => {
+        API.findLineDocument(collUse, {
+            name: i
+        }, findItemMemberResult => {
+            res(findItemMemberResult)
+        })
+    }))).then(res => {
+        console.log(res)
     })
+    // API.findLineDocument(collUse, {
+    //     $unwind: {
+    //         itemGroups
+    //     }
+    // }, findItemMemberResult => {
+    //     console.log(findItemMemberResult)
+    // })
+
 })
 
 routerRequest.post('/addItem', async (req, res) => {
@@ -103,12 +115,12 @@ routerRequest.post('/addItem', async (req, res) => {
     // await itemGroups.map(i => await API.findLineDocument(collUse, {
     //     name: i
     // }, findItemMemberResult => {
-        
+
     // }))
     API.findLineDocument(collUse, {
-        
+
     })
-   
+
     API.insertOneDocument(collDoc, {
         hash,
         ownName,
@@ -224,12 +236,12 @@ routerRequest.post('/editerAuth', async (req, res) => {
         API.findLineDocument(collUse, {
             name
         }, findResult => {
-            if (findResult[0].itemsHash.includes(hash)){
+            if (findResult[0].itemsHash.includes(hash)) {
                 fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}-${hash}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
                 fs.writeFileSync(path.resolve(rootPath, `./public/originValue/${itemTitle}-${hash}-origin.json`), originValue)
 
                 res.send(msg(200, '修改完成'))
-            }else{
+            } else {
                 res.send(msg(200, '修改失败,您无权限修改'))
             }
         })
