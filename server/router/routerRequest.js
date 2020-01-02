@@ -99,6 +99,15 @@ routerRequest.post('/addItem', async (req, res) => {
     const itemName = itemTitle + '-' + hash
     const itemPath = path.resolve(rootPath, `./public/jsItems/${itemName}.js`)
     const originPath = path.resolve(rootPath, `./public/originValue/${itemName}-origin.json`)
+
+    // await itemGroups.map(i => await API.findLineDocument(collUse, {
+    //     name: i
+    // }, findItemMemberResult => {
+        
+    // }))
+    API.findLineDocument(collUse, {
+        
+    })
    
     API.insertOneDocument(collDoc, {
         hash,

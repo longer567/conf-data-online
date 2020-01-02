@@ -6,7 +6,7 @@ loginPermission(async () => {
     if (itemHash && itemTitle) {
         const originJsonContent = await request(`${API_BASE}/originValue/${itemTitle}-${itemHash}-origin.json`)
         $('.itemName').val(itemTitle)
-        const itemGroups = $('.itemOwn').val().trim().split('')
+        const itemGroups = $('.itemOwn').val() ? $('.itemOwn').val().trim().split(';') : []
         $('.editer-data').html(JSON.stringify(originJsonContent, null, 4))
         contentRender()
 
