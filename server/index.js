@@ -8,7 +8,7 @@ const app = express()
 app.use(express.static('public'))
 app.set('view engine', 'pug')
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: true }))
+// app.use(bodyParser.urlencoded({ extended: true }))
 app.use(routerPage)
 app.use(routerRequest)
 

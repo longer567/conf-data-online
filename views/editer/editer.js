@@ -28,7 +28,7 @@ loginPermission(async () => {
                 if (result.status === 200) {
                     console.log(result)
                 } else {
-                    alert('您无权编辑该项目')
+                    alert(result.msg)
                     window.location.href = `${API_BASE}/index`
                 }
             })

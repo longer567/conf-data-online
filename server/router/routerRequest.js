@@ -177,6 +177,7 @@ routerRequest.post('/findUserAllItems', async (req, res) => {
 })
 
 routerRequest.post('/isLogin', async (req, res) => {
+    console.log(req.body)
     const {
         name
     } = req.body
@@ -203,10 +204,9 @@ routerRequest.post('/editerAuth', async (req, res) => {
                 }
             },
             findItemMemberResult => {
-
             if (!findItemMemberResult || findItemMemberResult.length < itemGroups.length) {
                 // some other not exist!
-                res.send(msg(199, '部分用户未存在'))
+                res.send(msg(200, '部分用户未存在'))
             } else {
                 API.findLineDocument(collUse, {
                     name
@@ -222,7 +222,7 @@ routerRequest.post('/editerAuth', async (req, res) => {
                             // find delete mumbers
                             const deleteMember = findDocResult[0].itemGroups.map(i => !itemGroups.includes(i))
                             // find add mumbers
-                            const addMember = itemGroups.map(i => !findDocResult[0].itemGroups.include(i))
+                            const addMember = itemGroups.map(i => !findDocResult[0].itemGroups.includes(i))
                             // update collDoc itemGroups
                             API.updateOneDocument(collDoc, {
                                 hash
