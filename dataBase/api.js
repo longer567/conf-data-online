@@ -49,6 +49,11 @@ const updateOneDocument = (collection, aim, options = {}, callback = () => {}) =
     .updateOne(aim, options, (err, result) => callback(result))
 }
 
+const updateDocument = (collection, aim, options = {}, callback = () => {}) => {
+  collection
+    .updateMany(aim, options, (err, result) => callback(result))
+}
+
 /**
  * 
  * @param {*} collection 
@@ -75,6 +80,7 @@ module.exports = {
   findAllDocuments,
   findLineDocument,
   updateOneDocument,
+  updateDocument,
   removeOneDocument,
   insertOneDocument,
   createCollectionIndex

@@ -36,7 +36,8 @@ const api = {
     sign: `${API_BASE}/signUser`,
     login: `${API_BASE}/loginUser`,
     isLogin: `${API_BASE}/isLogin`,
-    editerAuth: `${API_BASE}/editerAuth`
+    editerAuth: `${API_BASE}/editerAuth`,
+    findItemByHash: `${API_BASE}/findItemByHash`
 }
 
 const loginPermission = async (callback) => {
@@ -48,11 +49,17 @@ const loginPermission = async (callback) => {
         msg
     } = result
     if (status === 199) {
-        alert(msg)
-        window.location.href = `${API_BASE}/login`
-    }else{
+        if ((new URL(window.location.href)).pathname.indexOf('login') === -1) {
+            alert(msg)
+            window.location.href = `${API_BASE}/login`
+        }else
+            callback()
+    } else {
         // status === 200
-        callback()
+        if ((new URL(window.location.href)).pathname.indexOf('login') > -1) {
+            window.location.href = `${API_BASE}/index`
+        } else
+            callback()
     }
 }
 

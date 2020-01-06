@@ -3,7 +3,6 @@
     justify-content: space-between;
     align-items: center;
     height: 60px;
-    color: #fff;
     border: 1px solid #DCDFE6;
     color: #409EFF;
 }
@@ -12,9 +11,16 @@
     font-size: 16px;
     margin-left: 100px;
     cursor: pointer;
+    flex: 1;
 }
 
 .header-right {
+    font-size: 16px;
+    margin-right: 100px;
+    cursor: pointer;
+}
+
+.header-logout {
     font-size: 16px;
     margin-right: 100px;
     cursor: pointer;

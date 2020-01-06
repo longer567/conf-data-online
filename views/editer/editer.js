@@ -4,6 +4,13 @@ loginPermission(async () => {
     const itemHash = getUrlParams(window.location.href, 'itemHash')
     const itemTitle = getUrlParams(window.location.href, 'itemTitle')
     if (itemHash && itemTitle) {
+        const {
+            data
+        } = await request(`${API_BASE}/findItemByHash`, {
+            hash: itemHash
+        }, 'POST')
+        $('.itemOwn').val(data.itemGroups.join(';'))
+
         const originJsonContent = await request(`${API_BASE}/originValue/${itemTitle}-${itemHash}-origin.json`)
         $('.itemName').val(itemTitle)
         
@@ -26,7 +33,6 @@ loginPermission(async () => {
                 itemGroups
             }, 'POST').then(result => {
                 if (result.status === 200) {
-                    console.log(result)
                 } else {
                     alert(result.msg)
                     window.location.href = `${API_BASE}/index`

@@ -49,6 +49,11 @@ $(document).on('click', '.item-edit', function (e) {
     window.location.href = `${API_BASE}/editer?itemHash=${$(this).attr('hash')}&itemTitle=${$(this).attr('itemTitle')}`
 })
 
+$(document).on('click', '.header-logout', function (e) {
+    localStorage.clear()
+    window.location.href = `${API_BASE}/login`
+})
+
 const formatDate = (timer) => {
     const year = timer.getFullYear()
     const month = timer.getMonth() + 1

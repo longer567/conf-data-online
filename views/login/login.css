@@ -1,3 +1,15 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    border: 1px solid #DCDFE6;
+}
+.text{
+    cursor: pointer;
+    margin-right: 100px;
+    color: #409EFF;
+}
 .login,
 .sign {
     position: relative;
