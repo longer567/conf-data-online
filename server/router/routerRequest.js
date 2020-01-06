@@ -52,6 +52,7 @@ routerRequest.post('/loginUser', async (req, res) => {
         name,
         pass
     } = req.body
+    console.log(req)
     const coll = await collection('users')
     API.findLineDocument(coll, {
         name,
@@ -77,22 +78,20 @@ routerRequest.post('/test', async (req, res) => {
     const collUse = await collection('users')
     const collDoc = await collection('documents')
 
-    Promise.all(itemGroups.map(async i => new Promise((res, rej) => {
-        API.findLineDocument(collUse, {
-            name: i
-        }, findItemMemberResult => {
-            res(findItemMemberResult)
-        })
-    }))).then(res => {
-        console.log(res)
-    })
-    // API.findLineDocument(collUse, {
-    //     $unwind: {
-    //         itemGroups
-    //     }
-    // }, findItemMemberResult => {
-    //     console.log(findItemMemberResult)
-    // })
+    API.findLineDocument(collUse, {
+            name: {
+                $in: itemGroups
+            }
+        },
+        findItemMemberResult => {
+            if (!findItemMemberResult || findItemMemberResult.length < itemGroups.length) {
+                // some other not exist!
+                res.send(msg(199, '部分用户未存在'))
+            } else {
+
+            }
+        }
+    )
 
 })
 
@@ -112,41 +111,45 @@ routerRequest.post('/addItem', async (req, res) => {
     const itemPath = path.resolve(rootPath, `./public/jsItems/${itemName}.js`)
     const originPath = path.resolve(rootPath, `./public/originValue/${itemName}-origin.json`)
 
-    // await itemGroups.map(i => await API.findLineDocument(collUse, {
-    //     name: i
-    // }, findItemMemberResult => {
-
-    // }))
     API.findLineDocument(collUse, {
-
-    })
-
-    API.insertOneDocument(collDoc, {
-        hash,
-        ownName,
-        itemTitle,
-        itemName,
-        itemPath,
-        date,
-        originPath,
-        itemGroups
-    }, (insertItemResult => {
-        API.updateOneDocument(collUse, {
-            name: ownName
-        }, {
-            $push: {
-                itemsHash: hash
+            name: {
+                $in: itemGroups
             }
-        }, updateResult => {
+        },
+        findItemMemberResult => {
+            console.log('tag', itemGroups, findItemMemberResult)
+            if (itemGroups.length && (!findItemMemberResult || findItemMemberResult.length < itemGroups.length)) {
+                // some other not exist!
+                res.send(msg(199, '部分用户未存在'))
+            } else {
+                API.insertOneDocument(collDoc, {
+                    hash,
+                    ownName,
+                    itemTitle,
+                    itemName,
+                    itemPath,
+                    date,
+                    originPath,
+                    itemGroups
+                }, (insertItemResult => {
+                    API.updateOneDocument(collUse, {
+                        name: ownName
+                    }, {
+                        $push: {
+                            itemsHash: hash
+                        }
+                    }, updateResult => {
+                        fs.writeFileSync(itemPath, `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
+                        fs.writeFileSync(originPath, originValue)
 
-            fs.writeFileSync(itemPath, `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
-            fs.writeFileSync(originPath, originValue)
-
-            res.send(msg(200, 'success', {
-                item: `${itemName}.js`,
-            }))
-        })
-    }))
+                        res.send(msg(200, 'success', {
+                            item: `${itemName}.js`,
+                        }))
+                    })
+                }))
+            }
+        }
+    )
 })
 
 routerRequest.post('/findUserAllItems', async (req, res) => {
@@ -194,55 +197,66 @@ routerRequest.post('/editerAuth', async (req, res) => {
     const collUse = await collection('users')
     const collDoc = await collection('documents')
     checkToken(req, res, jwt, name, jwtKey, () => {
-        API.findLineDocument(collDoc, {
-            hash
-        }, findDocResult => {
-            // find delete mumbers
-            const deleteMember = findDocResult[0].itemGroups.map(i => !itemGroups.includes(i))
-            // find add mumbers
-            const addMember = itemGroups.map(i => !findDocResult[0].itemGroups.include(i))
-            // update collDoc itemGroups
-            API.updateOneDocument(collDoc, {
-                hash
-            }, {
-                $set: {
-                    itemGroups
-                }
-            }, async updateDocResult => {
-                // i delete name
-                await deleteMember.forEach(i => {
-                    API.updateOneDocument(collUse, {
-                        name: i
-                    }, {
-                        $pull: {
-                            itemsHash: hash
-                        }
-                    })
-                })
-                await addMember.forEach(i => {
-                    API.updateOneDocument(collUse, {
-                        name: i
-                    }, {
-                        $push: {
-                            itemsHash: hash
-                        }
-                    })
-                })
-
-                // xxx
-
-            })
-        })
         API.findLineDocument(collUse, {
-            name
-        }, findResult => {
-            if (findResult[0].itemsHash.includes(hash)) {
-                fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}-${hash}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
-                fs.writeFileSync(path.resolve(rootPath, `./public/originValue/${itemTitle}-${hash}-origin.json`), originValue)
+                name: {
+                    $in: itemGroups
+                }
+            },
+            findItemMemberResult => {
 
-                res.send(msg(200, '修改完成'))
+            if (!findItemMemberResult || findItemMemberResult.length < itemGroups.length) {
+                // some other not exist!
+                res.send(msg(199, '部分用户未存在'))
             } else {
-                res.send(msg(200, '修改失败,您无权限修改'))
+                API.findLineDocument(collUse, {
+                    name
+                }, findResult => {
+                    if (findResult[0].itemsHash.includes(hash)) {
+                        fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}-${hash}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
+                        fs.writeFileSync(path.resolve(rootPath, `./public/originValue/${itemTitle}-${hash}-origin.json`), originValue)
+
+                        API.findLineDocument(collDoc, {
+                            hash
+                        }, findDocResult => {
+                            console.log(findDocResult)
+                            // find delete mumbers
+                            const deleteMember = findDocResult[0].itemGroups.map(i => !itemGroups.includes(i))
+                            // find add mumbers
+                            const addMember = itemGroups.map(i => !findDocResult[0].itemGroups.include(i))
+                            // update collDoc itemGroups
+                            API.updateOneDocument(collDoc, {
+                                hash
+                            }, {
+                                $set: {
+                                    itemGroups
+                                }
+                            }, async updateDocResult => {
+                                // i delete name
+                                await deleteMember.forEach(i => {
+                                    API.updateOneDocument(collUse, {
+                                        name: i
+                                    }, {
+                                        $pull: {
+                                            itemsHash: hash
+                                        }
+                                    })
+                                })
+                                await addMember.forEach(i => {
+                                    API.updateOneDocument(collUse, {
+                                        name: i
+                                    }, {
+                                        $push: {
+                                            itemsHash: hash
+                                        }
+                                    })
+                                })
+                                res.send(msg(200, '修改完成'))
+                            })
+                        })
+                    } else {
+                        res.send(msg(200, '修改失败,您无权限修改'))
+                    }
+                })
             }
         })
     })

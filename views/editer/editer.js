@@ -6,11 +6,12 @@ loginPermission(async () => {
     if (itemHash && itemTitle) {
         const originJsonContent = await request(`${API_BASE}/originValue/${itemTitle}-${itemHash}-origin.json`)
         $('.itemName').val(itemTitle)
-        const itemGroups = $('.itemOwn').val() ? $('.itemOwn').val().trim().split(';') : []
+        
         $('.editer-data').html(JSON.stringify(originJsonContent, null, 4))
         contentRender()
 
         $(document).on('click', '.addItem-add', function (e) {
+            const itemGroups = $('.itemOwn').val() ? $('.itemOwn').val().trim().split(';').filter(i => i !== '') : []
             if (!inputCreateJson) {
                 console.log('output内容不能为空')
                 return
@@ -36,7 +37,7 @@ loginPermission(async () => {
         // create
         $(document).on('click', '.addItem-add', function (e) {
             const itemTitle = $('.itemName').val().trim()
-            const itemGroups = $('.itemOwn').val().trim().split('')
+            const itemGroups = $('.itemOwn').val() ? $('.itemOwn').val().trim().split(';').filter(i => i !== '') : []
             if (!itemTitle || !inputCreateJson) {
                 console.log('项目名称 output内容不能为空')
                 return

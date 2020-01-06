@@ -9,10 +9,12 @@ const request = (url, data = "", type = "GET") => {
         $.ajax({
             type,
             url,
-            data,
+            // for application json data
+            data: JSON.stringify(data),
             headers: {
                 "Authorization": window.localStorage.getItem('token')
             },
+            contentType: 'application/json;charset=UTF-8',
             success(params) {
                 console.log(params)
                 resolve(params)

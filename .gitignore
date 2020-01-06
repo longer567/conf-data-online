@@ -22,6 +22,8 @@ yarn.lock
 #sensitive infomation
 private.json
 tmp
+public/jsItems/*
+public/originValue/*
 
 
 
