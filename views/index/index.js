@@ -26,6 +26,7 @@ $(document).ready(() => {
                         <div class = "text">创建日期${formatDate(new Date(Number(date)))}</div>
                         <div class = "item-edit text" hash="${hash}" itemTitle="${itemTitle}">编辑</div> 
                         <div class = "item-delete text" hash="${hash}">删除</div>
+                        <div class = "watch-item-json text" itemPath="/originValue/${itemName}-origin.json">查看线上json</div>
                         <div class = "watch-item-js text" itemPath="/jsItems/${itemName}.js">查看线上js</div>                    
                     </div>`
                 })
@@ -42,6 +43,10 @@ $(document).on('click', '.header-right', function (e) {
 })
 
 $(document).on('click', '.watch-item-js', function (e) {
+    window.open(API_BASE + $(this).attr('itemPath'))
+})
+
+$(document).on('click', '.watch-item-json', function (e) {
     window.open(API_BASE + $(this).attr('itemPath'))
 })
 

@@ -1,13 +1,23 @@
 let inputCreateJson, inputTreeCreated, originValue
+const socket = io(API_BASE)
 
 loginPermission(async () => {
     const itemHash = getUrlParams(window.location.href, 'itemHash')
     const itemTitle = getUrlParams(window.location.href, 'itemTitle')
+    const name = window.localStorage.getItem('name')
+
+    socket.on('socketMsg', (mess) => {
+        if (itemHash === mess.hash && mess.name !== name) {
+            console.log(mess.msg)
+        }
+    })
+
     if (itemHash && itemTitle) {
         const {
             data
         } = await request(`${API_BASE}/findItemByHash`, {
-            hash: itemHash
+            hash: itemHash,
+            name
         }, 'POST')
         const {
             itemGroups,

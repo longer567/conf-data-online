@@ -1,9 +1,13 @@
 const express = require('express')
-const { routerPage } = require('./router/routerPage')
-const { routerRequest } = require('./router/routerRequest')
 var bodyParser = require('body-parser')
 
 const app = express()
+const server = require('http').createServer(app)
+const io = require('socket.io')(server)
+const {
+    routerPage
+} = require('./router/routerPage')
+const routerRequest = require('./router/routerRequest')(io)
 
 app.use(express.static('public'))
 app.set('view engine', 'pug')
@@ -12,4 +16,4 @@ app.use(bodyParser.json())
 app.use(routerPage)
 app.use(routerRequest)
 
-app.listen(3000, () => console.log('Example app listening on port 3000!'))
+server.listen(3000, () => console.log('Example app listening on port 3000!'))

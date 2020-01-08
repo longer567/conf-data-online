@@ -5,7 +5,8 @@ html
       include ../common/common.css
     style
       include editer.css
-    script(src="http://www.zeptojs.cn/zepto.min.js")
+    script(src="//www.zeptojs.cn/zepto.min.js")
+    script(src="//cdn.jsdelivr.net/npm/socket.io-client@2/dist/socket.io.js")
     script
       include ../common/common.js
     script
@@ -25,7 +26,5 @@ html
       div.editer-input
       pre.editer-result 
     div.button-group
-      div(class = "button addItem-input") 生成inputTree
-      div(class = "button addItem-json") 生成json
-      div(class = "button addItem-add") add添加
+      div(class = "button addItem-add") 提交
       
