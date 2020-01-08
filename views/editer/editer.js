@@ -11,6 +11,9 @@ loginPermission(async () => {
             console.log(mess.msg)
         }
     })
+    socket.on('socketFinish', (mess) => {
+        console.log(mess)
+    })
 
     if (itemHash && itemTitle) {
         const {

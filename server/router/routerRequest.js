@@ -162,7 +162,6 @@ module.exports = (io) => {
             name
         } = req.body
         const collDoc = await collection('documents')
-        console.log(111)
         // post msg: other enter the editer page
         io.on('connection', (socket) => {
             socket.emit('socketMsg', {
@@ -203,7 +202,6 @@ module.exports = (io) => {
     })
 
     routerRequest.post('/isLogin', async (req, res) => {
-        console.log(req.body)
         const {
             name
         } = req.body
@@ -244,8 +242,8 @@ module.exports = (io) => {
                                     hash
                                 }, findDocResult => {
                                     if (findDocResult[0].lockHash !== lockHash) {
-                                        res.send(msg(200, '已有其他用户编辑过此项目请刷新读取最新数据'))
-                                        return
+                                        return res.send(msg(200, '已有其他用户编辑过此项目请刷新读取最新数据'))
+
                                     }
                                     // find delete mumbers
                                     const deleteMember = findDocResult[0].itemGroups.filter(i => !itemGroups.includes(i))
@@ -256,8 +254,7 @@ module.exports = (io) => {
                                     if (deleteMember.length || addMember.length) {
                                         // if itemGroups, checking name is owner?
                                         if (name !== findDocResult[0].ownName) {
-                                            res.send(msg(200, '您没有权限修改组成员'))
-                                            return
+                                            return res.send(msg(200, '您没有权限修改组成员'))
                                         }
                                     }
                                     // update collDoc itemGroups
@@ -291,6 +288,14 @@ module.exports = (io) => {
                                                 itemsHash: hash
                                             }
                                         })
+                                        // post msg to other in this page saved
+                                        io.on('connection', (socket) => {
+                                            socket.emit('socketFinish', {
+                                                hash,
+                                                name,
+                                                msg: `an user named ${name} is edited and saved, you need to reload the page`
+                                            })
+                                        })
                                         res.send(msg(200, '修改完成'))
                                     })
                                 })
@@ -302,5 +307,49 @@ module.exports = (io) => {
                 })
         })
     })
+
+    routerRequest.post('/deleteItemByHash', async (req, res) => {
+        const {
+            name,
+            hash,
+            itemTitle
+        } = req.body
+        const collUse = await collection('users')
+        const collDoc = await collection('documents')
+        checkToken(req, res, jwt, name, jwtKey, () => {
+            API.findLineDocument(collDoc, {
+                hash
+            }, findResult => {
+                let {
+                    ownName,
+                    itemGroups
+                } = findResult[0]
+                if (ownName !== name) {
+                    return res.send(msg(200, '项目所属者才可删除该项目'))
+                }
+                itemGroups = [... new Set([...itemGroups, name])]
+                API.updateDocument(collUse, {
+                    name: {
+                        $in: itemGroups
+                    }
+                }, {
+                    $pull: {
+                        itemsHash: hash
+                    }
+                }, updateResult => {
+                    API.removeOneDocument(collDoc, {
+                        hash
+                    }, removeResult => {
+                        fs.unlinkSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}-${hash}.js`))
+                        fs.unlinkSync(path.resolve(rootPath, `./public/originValue/${itemTitle}-${hash}-origin.json`))
+
+                        res.send(msg(200, '项目删除成功'))
+                    })
+                })
+            })
+        })
+
+    })
+
     return routerRequest
 }

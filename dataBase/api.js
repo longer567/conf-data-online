@@ -58,11 +58,12 @@ const updateDocument = (collection, aim, options = {}, callback = () => {}) => {
  * 
  * @param {*} collection 
  * @param {object} object Want to delete object
+ * @param {object} options poly
  * @param {(res) => {}} callback Do something by res
  */
-const removeOneDocument = (collection, object, callback) => {
+const removeOneDocument = (collection, object, options = {}, callback) => {
   collection
-    .deleteOne(object, (err, res) => callback(res))
+    .deleteOne(object, options, (err, res) => callback(res))
 }
 
 const createCollectionIndex = (collection, object, callback) => {

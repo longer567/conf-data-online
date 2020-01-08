@@ -1,7 +1,8 @@
+const name = window.localStorage.getItem('name')
 $(document).ready(() => {
     loginPermission(() => {
         request(api.findUserAllItems, {
-            name: window.localStorage.getItem('name'),
+            name,
         }, 'POST').then(result => {
             const {
                 status,
@@ -25,7 +26,7 @@ $(document).ready(() => {
                         <div class = "text">创建者${ownName}</div>
                         <div class = "text">创建日期${formatDate(new Date(Number(date)))}</div>
                         <div class = "item-edit text" hash="${hash}" itemTitle="${itemTitle}">编辑</div> 
-                        <div class = "item-delete text" hash="${hash}">删除</div>
+                        <div class = "item-delete text" hash="${hash}" itemTitle="${itemTitle}">删除</div>
                         <div class = "watch-item-json text" itemPath="/originValue/${itemName}-origin.json">查看线上json</div>
                         <div class = "watch-item-js text" itemPath="/jsItems/${itemName}.js">查看线上js</div>                    
                     </div>`
@@ -38,6 +39,17 @@ $(document).ready(() => {
         })
     })
 })
+
+$(document).on('click', '.item-delete', function (e) {
+    request(api.deleteItemByHash, {
+        name,
+        hash: $(this).attr('hash'),
+        itemTitle: $(this).attr('itemTitle')
+    }, 'POST').then(res => {
+        console.log(res)
+    })
+})
+
 $(document).on('click', '.header-right', function (e) {
     window.location.href = `${API_BASE}/editer`
 })

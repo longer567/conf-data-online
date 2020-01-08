@@ -37,7 +37,8 @@ const api = {
     login: `${API_BASE}/loginUser`,
     isLogin: `${API_BASE}/isLogin`,
     editerAuth: `${API_BASE}/editerAuth`,
-    findItemByHash: `${API_BASE}/findItemByHash`
+    findItemByHash: `${API_BASE}/findItemByHash`,
+    deleteItemByHash: `${API_BASE}/deleteItemByHash`
 }
 
 const loginPermission = async (callback) => {
