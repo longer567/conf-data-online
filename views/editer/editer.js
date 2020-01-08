@@ -9,11 +9,16 @@ loginPermission(async () => {
         } = await request(`${API_BASE}/findItemByHash`, {
             hash: itemHash
         }, 'POST')
-        $('.itemOwn').val(data.itemGroups.join(';'))
+        const {
+            itemGroups,
+            lockHash
+        } = data
+        $('.itemOwn').val(itemGroups.join(';'))
+
 
         const originJsonContent = await request(`${API_BASE}/originValue/${itemTitle}-${itemHash}-origin.json`)
         $('.itemName').val(itemTitle)
-        
+
         $('.editer-data').html(JSON.stringify(originJsonContent, null, 4))
         contentRender()
 
@@ -30,9 +35,12 @@ loginPermission(async () => {
                 itemTitle,
                 itemContent: JSON.stringify(inputCreateJson),
                 originValue: JSON.stringify(originValue),
-                itemGroups
+                itemGroups,
+                lockHash
             }, 'POST').then(result => {
                 if (result.status === 200) {
+                    alert('添加成功')
+                    window.location.reload(true);
                 } else {
                     alert(result.msg)
                     window.location.href = `${API_BASE}/index`
@@ -56,7 +64,8 @@ loginPermission(async () => {
                 date: (new Date()).getTime(),
                 originValue: JSON.stringify(originValue)
             }, 'POST').then(res => {
-
+                alert('添加成功')
+                window.location.reload(true);
             })
         })
     }

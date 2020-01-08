@@ -1,13 +1,13 @@
 const fs = require('fs')
 const path = require('path')
 const config = require('config')
-const uuidV4 = require('uuid/v4')
 const express = require('express')
 const jwt = require('jsonwebtoken')
 const jwtKey = config.get('jwtKey')
 const routerRequest = express.Router()
 const {
-    msg
+    msg,
+    hashOutput
 } = require('../util')
 const {
     collection,
@@ -106,10 +106,11 @@ routerRequest.post('/addItem', async (req, res) => {
     } = req.body
     const collDoc = await collection('documents')
     const collUse = await collection('users')
-    const hash = uuidV4().split('-').slice(0, 3).join('')
     const itemName = itemTitle + '-' + hash
     const itemPath = path.resolve(rootPath, `./public/jsItems/${itemName}.js`)
     const originPath = path.resolve(rootPath, `./public/originValue/${itemName}-origin.json`)
+    const hash = hashOutput()
+    const lockHash = hashOutput()
 
     API.findLineDocument(collUse, {
             name: {
@@ -131,7 +132,8 @@ routerRequest.post('/addItem', async (req, res) => {
                     itemPath,
                     date,
                     originPath,
-                    itemGroups
+                    itemGroups,
+                    lockHash
                 }, (insertItemResult => {
                     API.updateOneDocument(collUse, {
                         name: ownName
@@ -206,11 +208,12 @@ routerRequest.post('/editerAuth', async (req, res) => {
         itemContent,
         originValue,
         itemTitle,
-        itemGroups
+        itemGroups,
+        lockHash
     } = req.body
     const collUse = await collection('users')
     const collDoc = await collection('documents')
-    checkToken(req, res, jwt, name, jwtKey, () => {
+    checkToken(req, res, jwt, name, jwtKey, async () => {
         API.findLineDocument(collUse, {
                 name: {
                     $in: itemGroups
@@ -229,6 +232,10 @@ routerRequest.post('/editerAuth', async (req, res) => {
                             API.findLineDocument(collDoc, {
                                 hash
                             }, findDocResult => {
+                                if (findDocResult[0].lockHash !== lockHash) {
+                                    res.send(msg(200, '已有其他用户编辑过此项目请刷新读取最新数据'))
+                                    return
+                                }
                                 // find delete mumbers
                                 const deleteMember = findDocResult[0].itemGroups.filter(i => !itemGroups.includes(i))
                                 // find add mumbers
@@ -242,13 +249,13 @@ routerRequest.post('/editerAuth', async (req, res) => {
                                         return
                                     }
                                 }
-
                                 // update collDoc itemGroups
                                 API.updateOneDocument(collDoc, {
                                     hash
                                 }, {
                                     $set: {
-                                        itemGroups
+                                        itemGroups,
+                                        lockHash: hashOutput()
                                     }
                                 }, async updateDocResult => {
                                     fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}-${hash}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)

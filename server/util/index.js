@@ -1,3 +1,4 @@
+const uuidV4 = require('uuid/v4')
 /**
  * 
  * @param {number} status status code for response
@@ -39,7 +40,10 @@ const checkToken = (req, res, jwt, name, jwtKey, callback) => {
     }
 }
 
+const hashOutput = () => uuidV4().split('-').slice(0, 3).join('')
+
 module.exports = {
     msg,
-    checkToken
+    checkToken,
+    hashOutput
 }
