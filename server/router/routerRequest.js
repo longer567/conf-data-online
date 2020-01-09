@@ -107,11 +107,11 @@ module.exports = (io) => {
         } = req.body
         const collDoc = await collection('documents')
         const collUse = await collection('users')
+        const hash = hashOutput()
+        const lockHash = hashOutput()
         const itemName = itemTitle + '-' + hash
         const itemPath = path.resolve(rootPath, `./public/jsItems/${itemName}.js`)
         const originPath = path.resolve(rootPath, `./public/originValue/${itemName}-origin.json`)
-        const hash = hashOutput()
-        const lockHash = hashOutput()
 
         API.findLineDocument(collUse, {
                 name: {
@@ -241,6 +241,10 @@ module.exports = (io) => {
                                 API.findLineDocument(collDoc, {
                                     hash
                                 }, findDocResult => {
+                                    if (!findDocResult.length)
+                                    {
+                                        return res.send(msg(200, '持有者已删除该项目'))
+                                    }
                                     if (findDocResult[0].lockHash !== lockHash) {
                                         return res.send(msg(200, '已有其他用户编辑过此项目请刷新读取最新数据'))
 
@@ -249,7 +253,6 @@ module.exports = (io) => {
                                     const deleteMember = findDocResult[0].itemGroups.filter(i => !itemGroups.includes(i))
                                     // find add mumbers
                                     const addMember = itemGroups.filter(i => !findDocResult[0].itemGroups.includes(i))
-
 
                                     if (deleteMember.length || addMember.length) {
                                         // if itemGroups, checking name is owner?
@@ -269,7 +272,6 @@ module.exports = (io) => {
                                         fs.writeFileSync(path.resolve(rootPath, `./public/jsItems/${itemTitle}-${hash}.js`), `var data_${itemTitle}_${hash.slice(0, 5)} = ${itemContent}`)
                                         fs.writeFileSync(path.resolve(rootPath, `./public/originValue/${itemTitle}-${hash}-origin.json`), originValue)
                                         // i delete name
-                                        console.log(addMember, deleteMember)
                                         await API.updateDocument(collUse, {
                                             name: {
                                                 $in: addMember

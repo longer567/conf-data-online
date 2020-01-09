@@ -78,7 +78,7 @@ loginPermission(async () => {
                 originValue: JSON.stringify(originValue)
             }, 'POST').then(res => {
                 alert('添加成功')
-                window.location.reload(true);
+                window.location.href = `${API_BASE}/index`
             })
         })
     }
@@ -137,6 +137,7 @@ function contentRender() {
 function valTreeCreate(val) {
     let domTemp = ''
     for (let i in val) {
+        console.log(typeof val[i].value)
         if (['string', 'number'].includes(val[i].value) || ['string', 'number'].includes(typeof val[i].value)) {
             domTemp += `<div class='item'>
                     <div class='input-title' title='${val[i].title}'>

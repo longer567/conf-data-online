@@ -31,14 +31,14 @@ const getUrlParams = (url, param) => (new URL(url)).searchParams.get(param)
 
 const API_BASE = '//localhost:3000'
 const api = {
-    findUserAllItems: `${API_BASE}/findUserAllItems`,
-    addItem: `${API_BASE}/addItem`,
     sign: `${API_BASE}/signUser`,
     login: `${API_BASE}/loginUser`,
     isLogin: `${API_BASE}/isLogin`,
+    addItem: `${API_BASE}/addItem`,
     editerAuth: `${API_BASE}/editerAuth`,
     findItemByHash: `${API_BASE}/findItemByHash`,
-    deleteItemByHash: `${API_BASE}/deleteItemByHash`
+    deleteItemByHash: `${API_BASE}/deleteItemByHash`,
+    findUserAllItems: `${API_BASE}/findUserAllItems`,
 }
 
 const loginPermission = async (callback) => {

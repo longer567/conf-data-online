@@ -38,37 +38,47 @@ $(document).ready(() => {
             }
         })
     })
-})
+});
 
-$(document).on('click', '.item-delete', function (e) {
-    request(api.deleteItemByHash, {
-        name,
-        hash: $(this).attr('hash'),
-        itemTitle: $(this).attr('itemTitle')
-    }, 'POST').then(res => {
-        console.log(res)
-    })
-})
-
-$(document).on('click', '.header-right', function (e) {
-    window.location.href = `${API_BASE}/editer`
-})
-
-$(document).on('click', '.watch-item-js', function (e) {
-    window.open(API_BASE + $(this).attr('itemPath'))
-})
-
-$(document).on('click', '.watch-item-json', function (e) {
-    window.open(API_BASE + $(this).attr('itemPath'))
-})
-
-$(document).on('click', '.item-edit', function (e) {
-    window.location.href = `${API_BASE}/editer?itemHash=${$(this).attr('hash')}&itemTitle=${$(this).attr('itemTitle')}`
-})
-
-$(document).on('click', '.header-logout', function (e) {
-    localStorage.clear()
-    window.location.href = `${API_BASE}/login`
+[{
+    DOM: '.header-right',
+    func() {
+        window.location.href = `${API_BASE}/editer`
+    }
+}, {
+    DOM: '.watch-item-js',
+    func() {
+        window.open(API_BASE + $(this).attr('itemPath'))
+    }
+}, {
+    DOM: '.watch-item-json',
+    func() {
+        window.open(API_BASE + $(this).attr('itemPath'))
+    }
+}, {
+    DOM: '.item-edit',
+    func() {
+        window.location.href = `${API_BASE}/editer?itemHash=${$(this).attr('hash')}&itemTitle=${$(this).attr('itemTitle')}`
+    }
+}, {
+    DOM: '.header-logout',
+    func() {
+        localStorage.clear()
+        window.location.href = `${API_BASE}/login`
+    }
+}, {
+    DOM: '.item-delete',
+    func() {
+        request(api.deleteItemByHash, {
+            name,
+            hash: $(this).attr('hash'),
+            itemTitle: $(this).attr('itemTitle')
+        }, 'POST').then(res => {
+            console.log(res)
+        })
+    }
+}].forEach(i => {
+    $(document).on('click', i.DOM, i.func)
 })
 
 const formatDate = (timer) => {
