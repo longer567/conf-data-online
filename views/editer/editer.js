@@ -47,7 +47,7 @@ loginPermission(async () => {
                 hash: itemHash,
                 itemTitle,
                 itemContent: JSON.stringify(inputCreateJson),
-                originValue: JSON.stringify(originValue),
+                originValue: $('.editer-data').val(),
                 itemGroups,
                 lockHash
             }, 'POST').then(result => {
@@ -75,7 +75,7 @@ loginPermission(async () => {
                 itemGroups,
                 itemContent: JSON.stringify(inputCreateJson),
                 date: (new Date()).getTime(),
-                originValue: JSON.stringify(originValue)
+                originValue: $('.editer-data').val()
             }, 'POST').then(res => {
                 alert('添加成功')
                 window.location.href = `${API_BASE}/index`
